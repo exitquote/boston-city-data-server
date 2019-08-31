@@ -1,17 +1,30 @@
 const express = require('express')
 const map = express.Router();
 const cors = require('cors')
-const mapModel = require('../models/libraries')
+const libModel = require('../models/libraries')
+const crimeModel = require('../models/crimes')
+const zipModel = require('../models/zipcodes')
+const pdModel = require('../models/policeDistricts')
 
-/* GET users listing. */
-map.get('/', (req, res, next) => {
-  
+const collections = {}
+
+
+map.get('/', cors(), (req, res, next) => {
+  var test = {
+    "Collections": [
+      'crimes',
+      'libraries',
+      'zipcodes',
+      'police_districts'
+    ]
+  }
+  res.status(200).json(test)
 });
 
 //{"type":"FeatureCollection","features":
 
 map.get('/libraries', cors(), (req, res, next) => {
-  mapModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+  libModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
     .then(libraries => {
       console.log(libraries)
       return libraries.map(library => library.toObject())
@@ -26,13 +39,35 @@ map.get('/libraries', cors(), (req, res, next) => {
 // db.crimeData.find({ "properties.DISTRICT" : "E18", "properties.STREET": /ROSEWOOD/ })
 // db.crimeData.find({'properties.DISTRCIT': 'B2'})
 
-map.get('/crimes', (req, res, next) => {
-  mapModel.find({'properties.DISTRCIT': 'B2'})
-    .then(mountains => {
-      return mountains.map(mountain => mountain.toObject())
+map.get('/crimes', cors(), (req, res, next) => {
+  crimeModel.find({'properties.DISTRCIT': 'B2'})
+    .then(crimes => {
+      return crimes.map(crime => crime.toObject())
     })
     // respond with status 200 and JSON of the examples
-    .then(mountains => res.status(200).json({ mountains: mountains }))
+    .then(crimes => res.status(200).json({ "type": "FeatureCollection", features: crimes })
+    // if an error occurs, pass it to the handler
+    .catch(next))
+});
+
+map.get('/zipcodes', cors(), (req, res, next) => {
+  zipModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(zipcodes => {
+      return zipcodes.map(zipcode => zipcode.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(zipcodes => res.status(200).json({ "type": "FeatureCollection", features: zipcodes}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/police_districts', cors(), (req, res, next) => {
+  pdModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(pds => {
+      return pds.map(pd => pd.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(pds => res.status(200).json({ "type": "FeatureCollection", features: pds}))
     // if an error occurs, pass it to the handler
     .catch(next)
 });
