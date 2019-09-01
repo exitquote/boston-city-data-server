@@ -6,6 +6,9 @@ const crimeModel = require('../models/crimes')
 const zipModel = require('../models/zipcodes')
 const pdModel = require('../models/policeDistricts')
 const schoolModel = require('../models/schools')
+const neighborhoodModel = require('../models/neighborhoods')
+const landmarkModel = require('../models/landmarks')
+const openSpaceModel = require('../models/openSpace')
 
 const collections = {}
 
@@ -13,10 +16,10 @@ const collections = {}
 map.get('/', cors(), (req, res, next) => {
   var test = {
     "Collections": [
-      'crimes',
+      //'crimes',
       'libraries',
       'zipcodes',
-      'police_districts'
+      'police_districts',
     ]
   }
   res.status(200).json(test)
@@ -80,6 +83,39 @@ map.get('/public_schools', cors(), (req, res, next) => {
     })
     // respond with status 200 and JSON of the examples
     .then(schools => res.status(200).json({ "type": "FeatureCollection", features: schools}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/neighborhoods', cors(), (req, res, next) => {
+  neighborhoodModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(neighborhoods => {
+      return neighborhoods.map(neighborhood => neighborhood.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(neighborhoods => res.status(200).json({ "type": "FeatureCollection", features: neighborhoods}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/landmarks', cors(), (req, res, next) => {
+  landmarkModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(landmarks => {
+      return landmarks.map(landmark => landmark.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(landmarks => res.status(200).json({ "type": "FeatureCollection", features: landmarks}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/openspaces', cors(), (req, res, next) => {
+  openspaceModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(openspaces => {
+      return openspaces.map(openspace => openspace.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(openspaces => res.status(200).json({ "type": "FeatureCollection", features: openspaces}))
     // if an error occurs, pass it to the handler
     .catch(next)
 });
