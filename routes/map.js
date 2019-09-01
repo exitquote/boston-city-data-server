@@ -8,7 +8,7 @@ const pdModel = require('../models/policeDistricts')
 const schoolModel = require('../models/schools')
 const neighborhoodModel = require('../models/neighborhoods')
 const landmarkModel = require('../models/landmarks')
-const openSpaceModel = require('../models/openSpace')
+const openSpaceModel = require('../models/openSpaces')
 
 const collections = {}
 
@@ -110,7 +110,7 @@ map.get('/landmarks', cors(), (req, res, next) => {
 });
 
 map.get('/openspaces', cors(), (req, res, next) => {
-  openspaceModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+  openSpaceModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
     .then(openspaces => {
       return openspaces.map(openspace => openspace.toObject())
     })
