@@ -9,6 +9,8 @@ const schoolModel = require('../models/schools')
 const neighborhoodModel = require('../models/neighborhoods')
 const landmarkModel = require('../models/landmarks')
 const openSpaceModel = require('../models/openSpaces')
+const fsModel = require('../models/fireStations.js')
+const fdModel = require('../models/fireDistricts')
 
 const collections = {}
 
@@ -72,6 +74,28 @@ map.get('/police_districts', cors(), (req, res, next) => {
     })
     // respond with status 200 and JSON of the examples
     .then(pds => res.status(200).json({ "type": "FeatureCollection", features: pds}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/fire_stations', cors(), (req, res, next) => {
+  fsModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(fss => {
+      return fss.map(fs => fs.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(fss => res.status(200).json({ "type": "FeatureCollection", features: fss}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/fire_districts', cors(), (req, res, next) => {
+  fdModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(fds => {
+      return fds.map(fd => fd.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(fds => res.status(200).json({ "type": "FeatureCollection", features: fds}))
     // if an error occurs, pass it to the handler
     .catch(next)
 });
