@@ -13,3 +13,11 @@ Command to import an example geojson dataset into mongo:
 Example using csv2geojson to convert police data:
 
 `csv2geojson tmpcl2rr915.csv > boston_crime_test_clean.geojson`
+
+To add a dataset:
+
+- import to the DB
+- add a model
+- add model to includes in map.js
+- add a route in map.js
+- add to frontend repo hashmap

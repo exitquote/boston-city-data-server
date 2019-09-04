@@ -9,6 +9,7 @@ const schoolModel = require('../models/schools')
 const neighborhoodModel = require('../models/neighborhoods')
 const landmarkModel = require('../models/landmarks')
 const openSpaceModel = require('../models/openSpaces')
+const hydrantModel = require('../models/hydrants')
 
 const collections = {}
 
@@ -44,6 +45,9 @@ map.get('/libraries', cors(), (req, res, next) => {
 // db.crimeData.find({'properties.DISTRCIT': 'B2'})
 
 map.get('/crimes', cors(), (req, res, next) => {
+  // get parameters
+  // req.params({})
+  // then pass these through to find
   crimeModel.find({'properties.DISTRCIT': 'B2'})
     .then(crimes => {
       return crimes.map(crime => crime.toObject())
@@ -118,6 +122,18 @@ map.get('/openspaces', cors(), (req, res, next) => {
     .then(openspaces => res.status(200).json({ "type": "FeatureCollection", features: openspaces}))
     // if an error occurs, pass it to the handler
     .catch(next)
+});
+
+map.get('/hydrants', cors(), (req, res, next) => {
+  hydrantModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(hydrants => {
+      console.log(hydrants)
+      return hydrants.map(hydrant => hydrant.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(hydrants => res.status(200).json({ "type": "FeatureCollection", features: hydrants })
+    // if an error occurs, pass it to the handler
+    .catch(next))
 });
 
 module.exports = map;
