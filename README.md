@@ -6,6 +6,10 @@ police data is CSV only and has a lot of nulled out values for fields that I'm s
 
 My own notes:
 
+Create DB:
+
+`use bostonCityData`
+
 Command to import an example geojson dataset into mongo:
 
 `jq --compact-output ".features" ZIP_Codes.geojson | mongoimport --db bostonCityData -c zipcodes --jsonArray`
