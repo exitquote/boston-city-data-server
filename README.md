@@ -14,6 +14,8 @@ Command to import an example geojson dataset into mongo:
 
 `jq --compact-output ".features" ZIP_Codes.geojson | mongoimport --db bostonCityData -c zipcodes --jsonArray`
 
+This requires that the collection name match what's in the code.  Scripting this import is in the open issues.
+
 Example using csv2geojson to convert police data:
 
 `csv2geojson tmpcl2rr915.csv > boston_crime_test_clean.geojson`
