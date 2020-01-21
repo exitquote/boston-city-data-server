@@ -5,7 +5,7 @@ const mongooseBaseName = 'bostonCityData'
 
 // create the mongodb uri for development and test
 const database = {
-  development: `mongodb://localhost:27017/${mongooseBaseName}`
+  development: `mongodb://host.docker.internal:27017/${mongooseBaseName}`
 }
 
 // Identify if development environment is test or development
