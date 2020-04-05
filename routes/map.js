@@ -5,11 +5,12 @@ const libModel = require('../models/libraries')
 const crimeModel = require('../models/crimes')
 const zipModel = require('../models/zipcodes')
 const pdModel = require('../models/policeDistricts')
+const psModel = require('../models/policeStations')
 const schoolModel = require('../models/schools')
 const neighborhoodModel = require('../models/neighborhoods')
 const landmarkModel = require('../models/landmarks')
 const openSpaceModel = require('../models/openSpaces')
-const fsModel = require('../models/fireStations.js')
+const fsModel = require('../models/fireStations')
 const fdModel = require('../models/fireDistricts')
 
 const collections = {}
@@ -74,6 +75,17 @@ map.get('/police_districts', cors(), (req, res, next) => {
     })
     // respond with status 200 and JSON of the examples
     .then(pds => res.status(200).json({ "type": "FeatureCollection", features: pds}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/police_stations', cors(), (req, res, next) => {
+  psModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(pss => {
+      return pss.map(ps => ps.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(pss => res.status(200).json({ "type": "FeatureCollection", features: pss}))
     // if an error occurs, pass it to the handler
     .catch(next)
 });
