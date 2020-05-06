@@ -12,6 +12,13 @@ const landmarkModel = require('../models/landmarks')
 const openSpaceModel = require('../models/openSpaces')
 const fsModel = require('../models/fireStations')
 const fdModel = require('../models/fireDistricts')
+const cityCouncilDistrictsModel = require('../models/cityCouncilDistricts')
+const wardModel = require('../models/wards')
+const trashModel = require('../models/trash')
+const precinctModel = require('../models/precincts')
+const snowRoutesModel = require('../models/snowEmergencyRoutes')
+const fireBoxModel = require('../models/fireBoxLocations')
+const pollsModel = require('../models/pollingLocations')
 
 const collections = {}
 
@@ -152,6 +159,83 @@ map.get('/openspaces', cors(), (req, res, next) => {
     })
     // respond with status 200 and JSON of the examples
     .then(openspaces => res.status(200).json({ "type": "FeatureCollection", features: openspaces}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/city_council_districts', cors(), (req, res, next) => {
+  cityCouncilDistrictsModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(citycouncildistricts => {
+      return citycouncildistricts.map(citycouncildistrict => citycouncildistrict.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(citycouncildistricts => res.status(200).json({ "type": "FeatureCollection", features: citycouncildistricts}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/wards', cors(), (req, res, next) => {
+  wardModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(wards => {
+      return wards.map(ward => ward.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(wards => res.status(200).json({ "type": "FeatureCollection", features: wards}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/trash', cors(), (req, res, next) => {
+  trashModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(trash => {
+      return trash.map(trashday => trashday.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(trash => res.status(200).json({ "type": "FeatureCollection", features: trash}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/precincts', cors(), (req, res, next) => {
+  precinctModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(precincts => {
+      return precincts.map(precinct => precinct.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(precincts => res.status(200).json({ "type": "FeatureCollection", features: precincts}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/fire_alarm_boxes', cors(), (req, res, next) => {
+  fireBoxModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(fireboxes => {
+      return fireboxes.map(firebox=> firebox.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(fireboxes => res.status(200).json({ "type": "FeatureCollection", features: fireboxes}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/snow_emergency_routes', cors(), (req, res, next) => {
+  snowRoutesModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(snowroutes => {
+      return snowroutes.map(snowroute => snowroute.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(snowroutes => res.status(200).json({ "type": "FeatureCollection", features: snowroutes}))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+});
+
+map.get('/polling_locations', cors(), (req, res, next) => {
+  pollsModel.find({}, { type: 1, properties: 1, geometry: 1, _id: 0 })
+    .then(polls => {
+      return polls.map(poll => poll.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(polls=> res.status(200).json({ "type": "FeatureCollection", features: polls}))
     // if an error occurs, pass it to the handler
     .catch(next)
 });
